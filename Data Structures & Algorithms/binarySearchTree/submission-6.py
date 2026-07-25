@@ -1,0 +1,152 @@
+class TreeNode:
+    def __init__(self, key: int, val: int, left: "TreeNode | None" = None, right: "TreeNode | None" = None):
+        self.key = key
+        self.val = val
+        self.left = left
+        self.right = right
+
+class TreeMap:
+    
+    def __init__(self):
+        self.root = None
+
+    def insert(self, key: int, val: int) -> None:
+        new_node = TreeNode(key=key, val=val)
+        if self.root is None:
+            self.root = new_node
+            return
+        
+        curr = self.root
+        while curr:
+            if key > curr.key:
+                if curr.right is None:
+                    curr.right = new_node
+                    return
+                else:
+                    curr = curr.right
+            elif key < curr.key:
+                if curr.left is None:
+                    curr.left = new_node
+                    return
+                else:
+                    curr = curr.left
+            else:
+                curr.val = val
+                return
+
+    def get(self, key: int) -> int:
+        if self.root is None:
+            return -1
+        
+        curr = self.root
+        while curr:
+            if curr.key == key:
+                return curr.val
+            elif key > curr.key:
+                curr = curr.right
+            else:
+                curr = curr.left
+        return -1
+
+    def getMin(self) -> int:
+        if self.root is None:
+            return -1
+        
+        min_node = self.findMin(self.root)
+        return min_node.val
+
+    def getMax(self) -> int:
+        if self.root is None:
+            return -1
+        
+        curr = self.root
+        while curr.right:
+            curr = curr.right
+        return curr.val
+
+    def findMin(self, node: TreeNode) -> TreeNode | None:
+        while node and node.left:
+            node = node.left
+        return node
+
+    def remove(self, key: int) -> None:
+        self.root = self.removeHelper(self.root, key)
+
+    def removeHelper(self, curr: TreeNode, key: int) -> TreeNode | None:
+        if curr is None:
+            return None
+        
+        if key > curr.key:
+            curr.right = self.removeHelper(curr.right, key)
+        elif key < curr.key:
+            curr.left = self.removeHelper(curr.left, key)
+        else:
+            if curr.left is None:
+                return curr.right
+            elif curr.right is None:
+                return curr.left
+            else:
+                minNode = self.findMin(curr.right)
+                curr.key = minNode.key
+                curr.val = minNode.val
+                curr.right = self.removeHelper(curr.right, minNode.key)
+        
+        return curr
+
+    def getInorderKeys(self) -> List[int]:
+        result = []
+        self.inorderTraversal(self.root, result)
+        return result
+
+    def inorderTraversal(self, root, result: list[int]) -> None:
+        if root is None:
+            return
+        
+        self.inorderTraversal(root.left, result)
+        result.append(root.key)
+        self.inorderTraversal(root.right, result)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
